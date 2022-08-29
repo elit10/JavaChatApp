@@ -21,13 +21,9 @@ public class ChatScreen extends JFrame
 	public int xVal = 1;
 	public int yVal = 1;
 	
-	private InputStream in;
-	private DataInputStream din;
-	private OutputStream out;
-	private DataOutputStream dout;
-	
-	private Socket socket;
-	
+	public Client curClient;
+
+
 	//the constructor for the chat screen
 	public ChatScreen(String name)
 	{
@@ -42,19 +38,6 @@ public class ChatScreen extends JFrame
 	
 	}
 	
-	public void paint(Graphics g) {
-		// we check if the user wants an animation or not
-		if(animBool)
-		{
-			super.paint(g);
-			g.setColor(Color.RED);
-			
-			g.fillOval(x, y, 150, 150);
-		}
-		
-			
-		
-	}
 	
 	public void init()
 	{
@@ -66,7 +49,7 @@ public class ChatScreen extends JFrame
 		btnPing = new JButton("Toggle Animation");
 		
 		btnSend.addActionListener(e->Send());
-		btnPing.addActionListener(e->ToggleAnim());
+		//btnPing.addActionListener(e->ToggleAnim());
 		
 		Panel pnl = new Panel();
 		
@@ -77,57 +60,10 @@ public class ChatScreen extends JFrame
 		add(txtChat);
 		add(pnl);
 		
-		try
-		{
-			socket = new Socket("localhost",5000);
-			in = socket.getInputStream();
-			din = new DataInputStream(in);
-		}
-		catch(Exception e)
-		{
-			System.out.println(e);
-		}
-		
-		
-		Timer s = new Timer(30, e-> Client());
-		s.start();
-		//Here we create a timer for the animation
-		Timer t = new Timer(30, e-> Animation());
-		t.start();
 	}
 	
-	
-	public void Client()
-	{
-		
-	}
-	
-	//this method checks if the ball has hit the boundaries or not
-	public void Animation()
-	{
-		x+=xVal;
-		y+=yVal;
 
-		System.out.println(x + " , " + y);
-		
-		repaint();
-		if(x>250)
-		{
-			xVal*=-1;
-		}
-		if(x<0)
-		{
-			xVal*=-1;
-		}
-		if(y>600)
-		{
-			yVal*=-1;
-		}
-		if(y<0)
-		{
-			yVal*=-1;
-		}
-	}
+	
 	// this method is used for adding a new line to the bottom of the array
 	// the chat history is also moved upwards
 	public void AddLine(String val)
@@ -155,32 +91,21 @@ public class ChatScreen extends JFrame
 	//can also be used to send info to the server
 	public void Send()
 	{
-		AddLine(txtChat.getText());
+		//AddLine(txtChat.getText());
+		try
+		{
+			curClient.SendData(txtChat.getText());
+			System.out.println("written");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
-	//The button action for toggling the animation
-	public void ToggleAnim()
-	{
-		if(animBool)
-		{
-			AddLine("Closed Animation");
-		}
-		else 
-		{
-			AddLine("Started Animation");
-		}
-		
-		animBool = !animBool;
-	}
 	
 }
-
-
-
-
-
-
 
 
 

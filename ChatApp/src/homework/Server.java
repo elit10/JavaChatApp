@@ -3,33 +3,49 @@ package homework;
 import java.io.*;
 import java.net.*;
 
+import javax.swing.Timer;
+
 public class Server 
 {
 	
+	public static int ip = 6000;
 	
+	private ServerSocket sv;
+	private Socket socket;
+	private OutputStream out;
+	private InputStream in;
+	private DataOutputStream dout;
+	private DataInputStream din;
+	
+	private String inputMsg = "";
 	public static void main(String[] args) 
+	{
+		Server sv = new Server();
+	}
+
+	public Server()
 	{
 		try
 		{
-			ServerSocket sv = new ServerSocket(5000);
-			Socket socket = sv.accept();
-			OutputStream out = socket.getOutputStream();
-			DataOutputStream dout = new  DataOutputStream(out);
 			
-			InputStream in = socket.getInputStream();
-			DataInputStream din = new DataInputStream(in);
+			sv = new ServerSocket(ip);
+
+			socket = sv.accept();
+
+			System.out.println("Connected ");
 			
+			out = socket.getOutputStream();
+			dout = new  DataOutputStream(out);
 			
-			String inputMsg = din.readUTF();
+			in = socket.getInputStream();
+			din = new DataInputStream(in);
 			
-			while(!inputMsg.equals("sv_Exit"))
+			while(true)
 			{
 				inputMsg = din.readUTF();
-				
+				System.out.println(inputMsg);
 				dout.writeUTF(inputMsg);
-				
 			}
-			
 		}
 		
 		catch(Exception e)
@@ -37,4 +53,6 @@ public class Server
 			System.out.println(e);
 		}
 	}
+	
+	
 }

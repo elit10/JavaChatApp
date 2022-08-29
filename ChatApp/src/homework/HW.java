@@ -179,8 +179,7 @@ public class HW extends JFrame
 				JOptionPane.showMessageDialog(this,
 					    "Welcome aboard " + name);
 				
-				ChatScreen cs = new ChatScreen(name);
-				
+				//Client c = new Client(name);
 				return;
 			}
 			
@@ -236,7 +235,7 @@ public class HW extends JFrame
 			JOptionPane.showMessageDialog(this,
 				    "Registeration is successful");
 			
-			System.out.println("put in the hashmap");
+			//System.out.println("put in the hashmap");
 		}
 	}
 	
